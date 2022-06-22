@@ -56,13 +56,12 @@ const getPreviousWeekReport = async todayDate => {
 };
 
 // set interval for 21 hours
-const start = async () => {
-	// get today date
-	setInterval(async () => {
-		const today = new Date();
-		if (today.getDay() === 1) {
-			const report = await getPreviousWeekReport(today);
-			let html = `<!DOCTYPE html>
+// get today date
+setInterval(async () => {
+	const today = new Date();
+	if (today.getDay() === 1) {
+		const report = await getPreviousWeekReport(today);
+		let html = `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -91,8 +90,8 @@ const start = async () => {
                 </tr>
             </thead>
             <tbody>`;
-			report.timeentries.forEach(item => {
-				html += `
+		report.timeentries.forEach(item => {
+			html += `
         <tr>
             <td>${new Date(item.timeInterval.start).toLocaleDateString(
 							'en-us',
@@ -115,40 +114,35 @@ const start = async () => {
 						})}</td>
             <td>${item.description}</td>
         </tr>`;
-			});
-			html += ` </tbody>
+		});
+		html += ` </tbody>
         </table>
         </body>
         </html>`;
-			// write html to file
-			fs.writeFileSync('./report.html', html);
+		// write html to file
+		fs.writeFileSync('./report.html', html);
 
-			sendMail(
-				html,
-				report.timeentries[0].userName,
-				new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000).toLocaleDateString(
-					'en-us',
-					{
-						weekday: 'long',
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric'
-					}
-				),
-				today.toLocaleDateString('en-us', {
+		sendMail(
+			html,
+			report.timeentries[0].userName,
+			new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000).toLocaleDateString(
+				'en-us',
+				{
 					weekday: 'long',
 					year: 'numeric',
 					month: 'short',
 					day: 'numeric'
-				})
-			);
-		}
-	}, 1000 * 60 * 60 * 21);
-};
-start()
-	.then(() => {
+				}
+			),
+			today.toLocaleDateString('en-us', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric'
+			})
+		);
 		console.log(`done for today ${new Date()}`);
-	})
-	.catch(err => {
-		console.log(err);
-	});
+	} else {
+		console.log(`Today is not the day ${new Date()}`);
+	}
+}, 1000 * 60 * 60 * 21);
