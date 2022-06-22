@@ -147,7 +147,7 @@ const start = async () => {
 };
 start()
 	.then(() => {
-		console.log('done');
+		console.log(`done for today ${new Date()}`);
 	})
 	.catch(err => {
 		console.log(err);
