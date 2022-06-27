@@ -55,9 +55,7 @@ const getPreviousWeekReport = async todayDate => {
 	return response.data;
 };
 
-// set interval for 21 hours
-// get today date
-setInterval(async () => {
+const start = async () => {
 	const today = new Date();
 	if (today.getDay() === 1) {
 		const report = await getPreviousWeekReport(today);
@@ -145,4 +143,7 @@ setInterval(async () => {
 	} else {
 		console.log(`Today is not the day ${new Date()}`);
 	}
-}, 1000 * 60 * 60 * 21);
+};
+
+start();
+setInterval(start, 1000 * 60 * 60 * 24);
